@@ -1,9 +1,60 @@
 import pygame
 import time
-from sudokuSolver import solve, is_valid, get_empty_spots
+# from sudokuSolver import solve, is_valid, get_empty_spots
 
 #To write on the game window
 pygame.font.init()
+
+#Methods from the text version to make it faster
+
+# find the next empty spot in the sudoku
+def get_empty_spots(bd):
+    for i in range(len(bd)):
+        for j in range(len(bd[0])):
+            if bd[i][j] == 0:
+                return (i, j)
+    return None
+
+
+# this function checks if a number is valid at that a given position
+def is_valid(bd, number: int, position: tuple):
+    # Checking if the row is valid
+    for i in range(len(bd)):
+        if position[1] != i and bd[position[0]][i] == number:
+            return False
+
+    # Checking if column is valid
+    for i in range(len(bd)):
+        if position[0] != i and bd[i][position[1]] == number:
+            return False
+
+    # Check the square
+    for i in range(-2, 3):
+        if position[0] // 3 == (position[0] + i) // 3:
+            for j in range(0, 3):
+                if i == 0 and j == 0:
+                    continue
+                if position[1] // 3 == (position[1] + j) // 3 and bd[position[0] + i][position[1] + j] == number:
+                    return False
+                if position[1] // 3 == (position[1] - j) // 3 and bd[position[0] + i][position[1] - j] == number:
+                    return False
+    return True
+
+
+# Sudoku solver with backtracking algorithm
+def solve(bd):
+    empty_spot = get_empty_spots(bd)
+    if not empty_spot:
+        return True
+    x, y = empty_spot
+    for i in range(1, 10):
+        if is_valid(bd, i, (x, y)):
+            bd[x][y] = i
+            if solve(bd):
+                return True
+            else:
+                bd[x][y] = 0
+    return False
 
 class Board:
 
@@ -192,7 +243,7 @@ def update_window(window, board, time, incorrect):
     # Draw time
     fnt = pygame.font.SysFont("comicsans", 40)
     text = fnt.render("Time: " + show_time(time), 1, (0, 0, 0))
-    window.blit(text, (540 - 160, 560))
+    window.blit(text, (540 - 175, 560))
     # Draw Strikes
     text = fnt.render("X " * incorrect, 1, (255, 0, 0))
     window.blit(text, (20, 560))
@@ -204,7 +255,7 @@ def show_time(secs):
     minute = secs//60
     hour = minute//60
 
-    display = " " + str(minute) + ":" + str(sec)
+    display = " " + str(minute) + " : " + str(sec)
     return display
 
 
@@ -218,7 +269,7 @@ def main():
     incorrect = 0
 
     while run:
-        game_time = time.time() - start_time
+        game_time = round(time.time() - start_time)
 
         for event in pygame.event.get():
 
