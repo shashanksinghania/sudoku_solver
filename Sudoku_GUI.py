@@ -60,15 +60,15 @@ class Board:
 
     #This is the puzzle board
     board = [
-        [3, 0, 6, 5, 0, 8, 4, 0, 0],
-        [5, 2, 0, 0, 0, 0, 0, 0, 0],
-        [0, 8, 7, 0, 0, 0, 0, 3, 1],
-        [0, 0, 3, 0, 1, 0, 0, 8, 0],
-        [9, 0, 0, 8, 6, 3, 0, 0, 5],
-        [0, 5, 0, 0, 9, 0, 6, 0, 0],
-        [1, 3, 0, 0, 0, 0, 2, 5, 0],
-        [0, 0, 0, 0, 0, 0, 0, 7, 4],
-        [0, 0, 5, 2, 0, 6, 3, 0, 0]
+        [8, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 3, 6, 0, 0, 0, 0, 0],
+        [0, 7, 0, 0, 9, 0, 2, 0, 0],
+        [0, 5, 0, 0, 0, 7, 0, 0, 0],
+        [0, 0, 0, 0, 4, 5, 7, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 3, 0],
+        [0, 0, 1, 0, 0, 0, 0, 6, 8],
+        [0, 0, 8, 5, 0, 0, 0, 1, 0],
+        [0, 9, 0, 0, 0, 0, 4, 0, 0]
     ]
 
     def __init__(self, num_rows, num_cols, width, height, window):
@@ -144,7 +144,7 @@ class Board:
             cube_width = self.width / 9
             x = pos[0] // cube_width
             y = pos[1] // cube_width
-            return (int(y),int(x))
+            return (int(y), int(x))
         else:
             return None
 
@@ -168,7 +168,7 @@ class Board:
                 self.cubes[row][col].animation_show(self.window, True)
                 self.revise_model()
                 pygame.display.update()
-                pygame.time.delay(100)
+                pygame.time.delay(40)
 
                 if self.solve_it_GUI():
                     return True
@@ -178,7 +178,7 @@ class Board:
                 self.revise_model()
                 self.cubes[row][col].animation_show(self.window, False)
                 pygame.display.update()
-                pygame.time.delay(100)
+                pygame.time.delay(40)
 
         return False
 
